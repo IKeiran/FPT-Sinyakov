@@ -30,6 +30,12 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_css_selector("input[type=\"submit\"]").click()
 
     def send_keys_to_element_by_name(self, wd, name, value):
+        """
+        :param wd: webdriver
+        :param name: element name
+        :param value: sending keys, if they present
+        :return:
+        """
         if value is not None:
             wd.find_element_by_name(name).click()
             wd.find_element_by_name(name).clear()
