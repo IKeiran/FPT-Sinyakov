@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.webdriver.common.action_chains import ActionChains
-import time, unittest
+import unittest, random
+
 
 def is_alert_present(wd):
     try:
@@ -10,15 +10,16 @@ def is_alert_present(wd):
     except:
         return False
 
+
 class test_add_group(unittest.TestCase):
     def setUp(self):
         self.wd = WebDriver()
         self.wd.implicitly_wait(60)
-    
-    def test_test_add_group(self):
-        success = True
-        wd = self.wd
-        wd.get("http://localhost/addressbook/group.php")
+
+    def open_main_page(self, wd):
+        wd.get("http://localhost/addressbook/")
+
+    def login_as(self, wd):
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys("admin")
@@ -26,7 +27,11 @@ class test_add_group(unittest.TestCase):
         wd.find_element_by_name("pass").clear()
         wd.find_element_by_name("pass").send_keys("secret")
         wd.find_element_by_css_selector("input[type=\"submit\"]").click()
+
+    def open_groups_page(self, wd):
         wd.find_element_by_link_text("groups").click()
+
+    def add_new_group(self, wd):
         wd.find_element_by_name("new").click()
         wd.find_element_by_name("group_name").click()
         wd.find_element_by_name("group_name").clear()
@@ -38,12 +43,27 @@ class test_add_group(unittest.TestCase):
         wd.find_element_by_name("group_footer").clear()
         wd.find_element_by_name("group_footer").send_keys("for cyrrent time")
         wd.find_element_by_name("submit").click()
+
+    def return_to_group_page(self, wd):
         wd.find_element_by_link_text("group page").click()
+
+    def logout(self, wd):
         wd.find_element_by_link_text("Logout").click()
+
+    def test_test_add_group(self):
+        success = True
+        wd = self.wd
+        self.open_main_page(wd)
+        self.login_as(wd)
+        self.open_groups_page(wd)
+        self.add_new_group(wd)
+        self.return_to_group_page(wd)
+        self.logout(wd)
         self.assertTrue(success)
-    
+
     def tearDown(self):
         self.wd.quit()
+
 
 if __name__ == '__main__':
     unittest.main()
