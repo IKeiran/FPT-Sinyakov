@@ -158,7 +158,7 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_xpath(xpath_anniversary_day).click()
         # u'изменение месяца юбилея'
         xpath_anniversary_month = "//div[@id='content']/form/select[4]//option[" + contact.anniversary_month+"]"
-        wd.find_element_by_xpath(xpath_birthday_month).click()
+        wd.find_element_by_xpath(xpath_anniversary_month).click()
         wd.find_element_by_name("byear").send_keys(contact.birthday_year)
         wd.find_element_by_name("ayear").click()
         wd.find_element_by_name("ayear").clear()
