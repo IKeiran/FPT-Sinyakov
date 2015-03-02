@@ -1,75 +1,8 @@
 # -*- coding: utf-8 -*-
 from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.webdriver.common.action_chains import ActionChains
+from classes.contact import Contact
 import unittest
 
-
-def randomize_str(attr):
-    import random
-    return attr + str(random.randint(0,1000000))
-
-class Contact:
-    def __init__(self,first_name=None, mid_name=None, last_name=None, nick_name=None,
-                    title=None, company=None, adress=None, home_phone=None, mobile_phone=None,
-                    work_phone=None, fax=None, email_prime=None, email_secondary=None, email_third=None,
-                    home_page=None, birthday_year=None, birthday_month=None, birthday_day=None, anniversary_year=None,
-                    anniversary_day=None, anniversary_month=None, adress_secondary=None,
-                    phone_secondary=None, notes=None):
-        self.first_name = first_name
-        self.mid_name = mid_name
-        self.last_name = last_name
-        self.nick_name = nick_name
-        self.title = title
-        self.company = company
-        self.adress = adress
-        self.home_phone = home_phone
-        self.mobile_phone = mobile_phone
-        self.work_phone = work_phone
-        self.fax = fax
-        self.email_prime = email_prime
-        self.email_secondary = email_secondary
-        self.email_third = email_third
-        self.home_page = home_page
-        self.birthday_year = birthday_year
-        self.birthday_month = birthday_month
-        self.birthday_day = birthday_day
-        self.anniversary_year = anniversary_year
-        self.anniversary_day = anniversary_day
-        self.anniversary_month = anniversary_month
-        self.adress_secondary = adress_secondary
-        self.phone_secondary = phone_secondary
-        self.notes = notes
-
-    @classmethod
-    def random(cls):
-        import random
-        """
-        :return: Сontact
-        """
-        return cls(first_name = randomize_str('first_name'),
-        mid_name = randomize_str('mid_name'),
-        last_name = randomize_str('last_name'),
-        nick_name = randomize_str('nick_name'),
-        title = randomize_str('title'),
-        company = randomize_str('company'),
-        adress = randomize_str('adress'),
-        home_phone = randomize_str('home_phone'),
-        mobile_phone = randomize_str('mobile_phone'),
-        work_phone = randomize_str('work_phone'),
-        fax = randomize_str('fax'),
-        email_prime = randomize_str('email_prime'),
-        email_secondary = randomize_str('email_secondary'),
-        email_third = randomize_str('email_third'),
-        home_page = randomize_str('home_page'),
-        birthday_year = str(random.randint(1950,2015)),
-        birthday_month = str(random.randint(0,12)),
-        birthday_day = str(random.randint(0,31)),
-        anniversary_year = str(random.randint(1950,2015)),
-        anniversary_month = str(random.randint(0,12)),
-        anniversary_day =str(random.randint(0,31)),
-        adress_secondary = randomize_str('adress_secondary'),
-        phone_secondary = randomize_str('phone_secondary'),
-        notes = randomize_str('notes'))
 
 def is_alert_present(wd):
     try:
@@ -77,6 +10,7 @@ def is_alert_present(wd):
         return True
     except:
         return False
+
 
 class test_add_contact(unittest.TestCase):
     def setUp(self):
@@ -145,21 +79,21 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_name("homepage").clear()
         wd.find_element_by_name("homepage").send_keys(contact.home_page)
         # u'изменение дня рождения'
-        xpath_birthday_day = "//div[@id='content']/form/select[1]//option["+ contact.birthday_day+"]"
+        xpath_birthday_day = "//div[@id='content']/form/select[1]//option[" + contact.birthday_day + "]"
         wd.find_element_by_xpath(xpath_birthday_day).click()
         # u'изменение месяца рождения'
-        xpath_birthday_month = "//div[@id='content']/form/select[2]//option["+ contact.birthday_month+"]"
+        xpath_birthday_month = "//div[@id='content']/form/select[2]//option[" + contact.birthday_month + "]"
         wd.find_element_by_xpath(xpath_birthday_month).click()
         wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").clear()
-
+        wd.find_element_by_name("byear").send_keys(contact.birthday_year)
         # u'изменение дня юбилея'
-        xpath_anniversary_day = "//div[@id='content']/form/select[3]//option[" + contact.anniversary_day+"]"
+        xpath_anniversary_day = "//div[@id='content']/form/select[3]//option[" + contact.anniversary_day + "]"
         wd.find_element_by_xpath(xpath_anniversary_day).click()
         # u'изменение месяца юбилея'
-        xpath_anniversary_month = "//div[@id='content']/form/select[4]//option[" + contact.anniversary_month+"]"
+        xpath_anniversary_month = "//div[@id='content']/form/select[4]//option[" + contact.anniversary_month + "]"
         wd.find_element_by_xpath(xpath_anniversary_month).click()
-        wd.find_element_by_name("byear").send_keys(contact.birthday_year)
+
         wd.find_element_by_name("ayear").click()
         wd.find_element_by_name("ayear").clear()
         wd.find_element_by_name("ayear").send_keys(contact.anniversary_year)
@@ -186,9 +120,10 @@ class test_add_contact(unittest.TestCase):
         self.add_contact(wd, contact)
         self.logout(wd)
         self.assertTrue(success)
-    
+
     def tearDown(self):
         self.wd.quit()
+
 
 if __name__ == '__main__':
     unittest.main()
