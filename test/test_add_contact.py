@@ -14,6 +14,6 @@ def app(request):
 def test_add_contact(app):
     contact = Contact.random()
     app.open_main_page()
-    app.login_as("admin", "secret")
-    app.add_contact(contact)
-    app.logout()
+    app.session.login_as("admin", "secret")
+    app.contact.add_contact(contact)
+    app.session.logout()

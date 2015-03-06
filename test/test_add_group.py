@@ -11,7 +11,7 @@ def app(request):
 
 
 def test_add_group(app):
-    app.login_as("admin", "secret")
+    app.session.login_as("admin", "secret")
     test_group = Group("Friends" + str(random.randint(0,1000000)), "My friends", "for current time")
-    app.add_new_group(test_group)
-    app.logout()
+    app.group.create(test_group)
+    app.session.logout()
