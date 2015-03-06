@@ -42,9 +42,6 @@ class Contact:
     @classmethod
     def random(cls):
         import random
-        """
-        :return: Сontact
-        """
         return cls(first_name=randomize_str('first_name'),
                    mid_name=randomize_str('mid_name'),
                    last_name=randomize_str('last_name'),
