@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import random, pytest
-from classes.group import Group
-from application import Application
+from model.group import Group
+from fixture.application import Application
 
 @pytest.fixture
 def app(request):
@@ -15,4 +15,3 @@ def test_add_group(app):
     test_group = Group("Friends" + str(random.randint(0,1000000)), "My friends", "for current time")
     app.add_new_group(test_group)
     app.logout()
-
