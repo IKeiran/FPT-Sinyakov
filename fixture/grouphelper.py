@@ -28,4 +28,3 @@ class GroupHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_name("delete").click()
         self.return_to_group_page()
-

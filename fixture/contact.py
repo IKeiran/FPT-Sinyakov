@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
+
 class ContactHelper:
     def __init__(self, app):
         self.app = app
 
     def send_keys_to_element_by_name(self, name, value):
         """
-        :param wd: webdriver
         :param name: element name
         :param value: sending keys, if they present
         :return:
@@ -15,8 +15,7 @@ class ContactHelper:
         wd.find_element_by_name(name).clear()
         wd.find_element_by_name(name).send_keys(value)
         if value is not None:
-          wd.find_element_by_name(name).click()
-
+            wd.find_element_by_name(name).click()
 
     def add_contact(self, contact):
         wd = self.app.wd
