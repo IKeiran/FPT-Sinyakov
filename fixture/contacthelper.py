@@ -105,12 +105,6 @@ class ContactHelper:
         self.update_button_click()
         self.return_to_homepage()
 
-    def edit(self, contact):
-        self.open_edit_page()
-        self.fill_in(contact)
-        self.update_button_click()
-        self.return_to_homepage()
-
     def edit_with_bottom_submit(self, contact):
         self.open_edit_page()
         self.fill_in(contact)
