@@ -3,7 +3,7 @@
 from selenium.webdriver.firefox.webdriver import WebDriver
 from fixture.session import SessionHelper
 from fixture.grouphelper import GroupHelper
-from fixture.contact import ContactHelper
+from fixture.contacthelper import ContactHelper
 
 class Application:
 

@@ -17,9 +17,24 @@ class ContactHelper:
         if value is not None:
             wd.find_element_by_name(name).click()
 
-    def add_contact(self, contact):
+    def select_first(self):
+        self.app.wd.find_element_by_name("selected[]").click()
+
+    def open_add_page(self):
+        self.app.wd.get("http://localhost/addressbook/edit.php")
+
+    def delete_button_click(self):
+        self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        self.app.wd.switch_to_alert().accept()
+
+    def open_main_page(self):
+        self.app.wd.find_element_by_link_text("home").click()
+
+    def return_to_homepage(self):
+        self.app.wd.find_element_by_link_text("home page").click()
+
+    def fill_in(self, contact):
         wd = self.app.wd
-        wd.get("http://localhost/addressbook/edit.php")
         self.send_keys_to_element_by_name("firstname", contact.first_name)
         self.send_keys_to_element_by_name("middlename", contact.mid_name)
         self.send_keys_to_element_by_name("lastname", contact.last_name)
@@ -53,4 +68,61 @@ class ContactHelper:
         self.send_keys_to_element_by_name("address2", contact.adress_secondary)
         self.send_keys_to_element_by_name("phone2", contact.phone_secondary)
         self.send_keys_to_element_by_name("notes", contact.notes)
-        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+
+    def submit_button_click(self):
+        self.app.wd.find_element_by_xpath("(//input[@type='submit'])[1]").click()
+
+    def submit_down_button_click(self):
+        self.app.wd.find_element_by_xpath("(//input[@type='submit'])[2]").click()
+
+    def delete_from_editpage_button_click(self):
+        self.app.wd.find_element_by_xpath("//form[@action='delete.php']/input[@type='submit']").click()
+
+    def update_button_click(self):
+        self.app.wd.find_element_by_xpath("(//input[@name='update'])[1]").click()
+
+    def update_bottom_button_click(self):
+        self.app.wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+
+    def open_edit_page(self):
+        self.app.wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
+
+    def add(self, contact):
+        self.open_add_page()
+        self.fill_in(contact)
+        self.submit_button_click()
+        self.return_to_homepage()
+
+    def add_with_bottom_submit(self, contact):
+        self.open_add_page()
+        self.fill_in(contact)
+        self.submit_down_button_click()
+        self.return_to_homepage()
+
+    def edit(self, contact):
+        self.open_edit_page()
+        self.fill_in(contact)
+        self.update_button_click()
+        self.return_to_homepage()
+
+    def edit(self, contact):
+        self.open_edit_page()
+        self.fill_in(contact)
+        self.update_button_click()
+        self.return_to_homepage()
+
+    def edit_with_bottom_submit(self, contact):
+        self.open_edit_page()
+        self.fill_in(contact)
+        self.update_bottom_button_click()
+        self.return_to_homepage()
+
+    def delete_first(self):
+        self.select_first()
+        self.delete_button_click()
+        self.open_main_page()
+
+    def delete_from_edit_page(self):
+        self.open_edit_page()
+        self.delete_from_editpage_button_click()
+        self.open_main_page()
