@@ -19,9 +19,10 @@ class Application:
             self.wd.current_url
             return True
         except:
-            return False
+            return
+        False
 
-    def open_main_page(self):
+    def go_to_main_page(self):
         wd = self.wd
         wd.get("http://localhost/addressbook/")
 

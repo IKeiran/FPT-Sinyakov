@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 
 class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-    def change_field_value(self, field_name, value):
+    def change_field_value(self, field_name, index):
         """
         :param field_name: element name
-        :param value: sending keys, if value nor None
+        :param index: sending keys, if value nor None
         :return:
         """
         wd = self.app.wd
-        if value is not None:
+        if index is not None:
             wd.find_element_by_name(field_name).clear()
-            wd.find_element_by_name(field_name).send_keys(value)
+            wd.find_element_by_name(field_name).send_keys(index)
             wd.find_element_by_name(field_name).click()
 
     def select_first(self):
@@ -27,11 +28,15 @@ class ContactHelper:
         self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         self.app.wd.switch_to_alert().accept()
 
-    def open_main_page(self):
+    def go_to_main_page(self):
         self.app.wd.find_element_by_link_text("home").click()
 
     def return_to_homepage(self):
         self.app.wd.find_element_by_link_text("home page").click()
+
+    def change_combobox_value(self, selector, value):
+        wd = self.app.wd
+        Select(wd.find_element_by_name(selector)).select_by_index(value)
 
     def fill_in(self, contact):
         wd = self.app.wd
@@ -52,18 +57,14 @@ class ContactHelper:
         self.change_field_value("homepage", contact.home_page)
         self.change_field_value("firstname", contact.first_name)
         # u'изменение дня рождения'
-        xpath_birthday_day = "//div[@id='content']/form/select[1]//option[" + contact.birthday_day + "]"
-        wd.find_element_by_xpath(xpath_birthday_day).click()
+        self.change_combobox_value("bday", contact.birthday_day)
         # u'изменение месяца рождения'
-        xpath_birthday_month = "//div[@id='content']/form/select[2]//option[" + contact.birthday_month + "]"
-        wd.find_element_by_xpath(xpath_birthday_month).click()
+        self.change_combobox_value("bmonth", contact.birthday_month)
         self.change_field_value("byear", contact.birthday_year)
         # u'изменение дня юбилея'
-        xpath_anniversary_day = "//div[@id='content']/form/select[3]//option[" + contact.anniversary_day + "]"
-        wd.find_element_by_xpath(xpath_anniversary_day).click()
+        self.change_combobox_value("aday", contact.anniversary_day)
         # u'изменение месяца юбилея'
-        xpath_anniversary_month = "//div[@id='content']/form/select[4]//option[" + contact.anniversary_month + "]"
-        wd.find_element_by_xpath(xpath_anniversary_month).click()
+        self.change_combobox_value("amonth", contact.anniversary_month)
         self.change_field_value("ayear", contact.anniversary_year)
         self.change_field_value("address2", contact.adress_secondary)
         self.change_field_value("phone2", contact.phone_secondary)
@@ -114,9 +115,9 @@ class ContactHelper:
     def delete_first(self):
         self.select_first()
         self.delete_button_click()
-        self.open_main_page()
+        self.go_to_main_page()
 
     def delete_from_edit_page(self):
         self.open_edit_page()
         self.delete_from_editpage_button_click()
-        self.open_main_page()
+        self.go_to_main_page()
