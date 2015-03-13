@@ -5,17 +5,17 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-    def send_keys_to_element_by_name(self, name, value):
+    def change_field_value(self, field_name, value):
         """
-        :param name: element name
-        :param value: sending keys, if they present
+        :param field_name: element name
+        :param value: sending keys, if value nor None
         :return:
         """
         wd = self.app.wd
-        wd.find_element_by_name(name).clear()
-        wd.find_element_by_name(name).send_keys(value)
         if value is not None:
-            wd.find_element_by_name(name).click()
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(value)
+            wd.find_element_by_name(field_name).click()
 
     def select_first(self):
         self.app.wd.find_element_by_name("selected[]").click()
@@ -35,39 +35,39 @@ class ContactHelper:
 
     def fill_in(self, contact):
         wd = self.app.wd
-        self.send_keys_to_element_by_name("firstname", contact.first_name)
-        self.send_keys_to_element_by_name("middlename", contact.mid_name)
-        self.send_keys_to_element_by_name("lastname", contact.last_name)
-        self.send_keys_to_element_by_name("nickname", contact.nick_name)
-        self.send_keys_to_element_by_name("title", contact.title)
-        self.send_keys_to_element_by_name("company", contact.company)
-        self.send_keys_to_element_by_name("address", contact.adress)
-        self.send_keys_to_element_by_name("home", contact.home_phone)
-        self.send_keys_to_element_by_name("mobile", contact.mobile_phone)
-        self.send_keys_to_element_by_name("work", contact.work_phone)
-        self.send_keys_to_element_by_name("fax", contact.fax)
-        self.send_keys_to_element_by_name("email", contact.email_prime)
-        self.send_keys_to_element_by_name("email2", contact.email_secondary)
-        self.send_keys_to_element_by_name("email3", contact.email_third)
-        self.send_keys_to_element_by_name("homepage", contact.home_page)
-        self.send_keys_to_element_by_name("firstname", contact.first_name)
+        self.change_field_value("firstname", contact.first_name)
+        self.change_field_value("middlename", contact.mid_name)
+        self.change_field_value("lastname", contact.last_name)
+        self.change_field_value("nickname", contact.nick_name)
+        self.change_field_value("title", contact.title)
+        self.change_field_value("company", contact.company)
+        self.change_field_value("address", contact.adress)
+        self.change_field_value("home", contact.home_phone)
+        self.change_field_value("mobile", contact.mobile_phone)
+        self.change_field_value("work", contact.work_phone)
+        self.change_field_value("fax", contact.fax)
+        self.change_field_value("email", contact.email_prime)
+        self.change_field_value("email2", contact.email_secondary)
+        self.change_field_value("email3", contact.email_third)
+        self.change_field_value("homepage", contact.home_page)
+        self.change_field_value("firstname", contact.first_name)
         # u'изменение дня рождения'
         xpath_birthday_day = "//div[@id='content']/form/select[1]//option[" + contact.birthday_day + "]"
         wd.find_element_by_xpath(xpath_birthday_day).click()
         # u'изменение месяца рождения'
         xpath_birthday_month = "//div[@id='content']/form/select[2]//option[" + contact.birthday_month + "]"
         wd.find_element_by_xpath(xpath_birthday_month).click()
-        self.send_keys_to_element_by_name("byear", contact.birthday_year)
+        self.change_field_value("byear", contact.birthday_year)
         # u'изменение дня юбилея'
         xpath_anniversary_day = "//div[@id='content']/form/select[3]//option[" + contact.anniversary_day + "]"
         wd.find_element_by_xpath(xpath_anniversary_day).click()
         # u'изменение месяца юбилея'
         xpath_anniversary_month = "//div[@id='content']/form/select[4]//option[" + contact.anniversary_month + "]"
         wd.find_element_by_xpath(xpath_anniversary_month).click()
-        self.send_keys_to_element_by_name("ayear", contact.anniversary_year)
-        self.send_keys_to_element_by_name("address2", contact.adress_secondary)
-        self.send_keys_to_element_by_name("phone2", contact.phone_secondary)
-        self.send_keys_to_element_by_name("notes", contact.notes)
+        self.change_field_value("ayear", contact.anniversary_year)
+        self.change_field_value("address2", contact.adress_secondary)
+        self.change_field_value("phone2", contact.phone_secondary)
+        self.change_field_value("notes", contact.notes)
 
     def submit_button_click(self):
         self.app.wd.find_element_by_xpath("(//input[@type='submit'])[1]").click()

@@ -27,22 +27,28 @@ class GroupHelper:
     def update_button_click(self):
         self.app.wd.find_element_by_name("update").click()
 
-    def fill_in(self, group):
+
+    def change_field_value(self, field_name, value):
+        """
+        :param field_name: element name
+        :param value: sending keys, if value nor None
+        :return:
+        """
         wd = self.app.wd
-        wd.find_element_by_name("group_name").click()
-        wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys(group.name)
-        wd.find_element_by_name("group_header").click()
-        wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys(group.header)
-        wd.find_element_by_name("group_footer").click()
-        wd.find_element_by_name("group_footer").clear()
-        wd.find_element_by_name("group_footer").send_keys(group.footer)
+        if value is not None:
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(value)
+            wd.find_element_by_name(field_name).click()
+
+    def fill_group_form(self, group):
+        self.change_field_value("group_name",group.name)
+        self.change_field_value("group_header",group.header)
+        self.change_field_value("group_footer",group.footer)
 
     def create(self, group):
         self.open_group_list_page()
         self.new_button_click()
-        self.fill_in(group)
+        self.fill_group_form(group)
         self.submit_button_click()
         self.return_to_group_page()
 
@@ -56,6 +62,6 @@ class GroupHelper:
         self.open_group_list_page()
         self.select_first_group()
         self.edit_button_click()
-        self.fill_in(test_group)
+        self.fill_group_form(test_group)
         self.update_button_click()
         self.return_to_group_page()
