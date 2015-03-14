@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+
 
 class ContactHelper:
     def __init__(self, app):
@@ -39,7 +39,6 @@ class ContactHelper:
         Select(wd.find_element_by_name(selector)).select_by_index(value)
 
     def fill_in(self, contact):
-        wd = self.app.wd
         self.change_field_value("firstname", contact.first_name)
         self.change_field_value("middlename", contact.mid_name)
         self.change_field_value("lastname", contact.last_name)
@@ -69,6 +68,11 @@ class ContactHelper:
         self.change_field_value("address2", contact.adress_secondary)
         self.change_field_value("phone2", contact.phone_secondary)
         self.change_field_value("notes", contact.notes)
+
+    def count(self):
+        self.go_to_main_page()
+        result = len(self.app.wd.find_elements_by_name('selected[]'))
+        return result
 
     def submit_button_click(self):
         self.app.wd.find_element_by_xpath("(//input[@type='submit'])[1]").click()

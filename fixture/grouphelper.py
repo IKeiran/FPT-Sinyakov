@@ -27,7 +27,6 @@ class GroupHelper:
     def update_button_click(self):
         self.app.wd.find_element_by_name("update").click()
 
-
     def change_field_value(self, field_name, value):
         """
         :param field_name: element name
@@ -41,9 +40,9 @@ class GroupHelper:
             wd.find_element_by_name(field_name).click()
 
     def fill_group_form(self, group):
-        self.change_field_value("group_name",group.name)
-        self.change_field_value("group_header",group.header)
-        self.change_field_value("group_footer",group.footer)
+        self.change_field_value("group_name", group.name)
+        self.change_field_value("group_header", group.header)
+        self.change_field_value("group_footer", group.footer)
 
     def create(self, group):
         self.open_group_list_page()
@@ -51,6 +50,11 @@ class GroupHelper:
         self.fill_group_form(group)
         self.submit_button_click()
         self.return_to_group_page()
+
+    def count(self):
+        self.open_group_list_page()
+        result = len(self.app.wd.find_elements_by_name('selected[]'))
+        return result
 
     def delete_first(self):
         self.open_group_list_page()
