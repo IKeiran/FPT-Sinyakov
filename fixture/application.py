@@ -5,11 +5,12 @@ from fixture.session import SessionHelper
 from fixture.grouphelper import GroupHelper
 from fixture.contacthelper import ContactHelper
 
+
 class Application:
 
     def __init__(self):
         self.wd = WebDriver()
-        self.wd.implicitly_wait(3)
+        self.wd.implicitly_wait(0)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
@@ -19,8 +20,7 @@ class Application:
             self.wd.current_url
             return True
         except:
-            return
-        False
+            return False
 
     def go_to_main_page(self):
         wd = self.wd
@@ -28,5 +28,3 @@ class Application:
 
     def destroy(self):
         self.wd.quit()
-
-

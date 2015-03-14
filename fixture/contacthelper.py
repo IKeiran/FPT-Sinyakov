@@ -29,7 +29,9 @@ class ContactHelper:
         self.app.wd.switch_to_alert().accept()
 
     def go_to_main_page(self):
-        self.app.wd.find_element_by_link_text("home").click()
+        wd = self.app.wd
+        if not(len(wd.find_elements_by_name("add")) > 0 and len(wd.find_elements_by_name("to_group")) > 0):
+            wd.find_element_by_link_text("home").click()
 
     def return_to_homepage(self):
         self.app.wd.find_element_by_link_text("home page").click()
