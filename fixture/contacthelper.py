@@ -4,8 +4,16 @@ from model.contact import Contact
 
 
 class ContactHelper:
+
+    contact_cache = None
+
     def __init__(self, app):
         self.app = app
+
+    def count(self):
+        self.go_to_main_page()
+        result = len(self.app.wd.find_elements_by_name('selected[]'))
+        return result
 
     def change_field_value(self, field_name, index):
         """
@@ -75,19 +83,15 @@ class ContactHelper:
         self.change_field_value("notes", contact.notes)
 
     def get_contact_list(self):
-        wd = self.app.wd
-        contact_list = []
-        for element in wd.find_elements_by_css_selector('tr[name=entry]'):
-            id = element.find_element_by_css_selector('input').get_attribute('value')
-            last_name = element.find_elements_by_css_selector('td')[1].text
-            first_name = element.find_elements_by_css_selector('td')[2].text
-            contact_list.append(Contact(first_name=first_name, last_name=last_name, id=id))
-        return contact_list
-
-    def count(self):
-        self.go_to_main_page()
-        result = len(self.app.wd.find_elements_by_name('selected[]'))
-        return result
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.contact_cache = []
+            for element in wd.find_elements_by_css_selector('tr[name=entry]'):
+                id = element.find_element_by_css_selector('input').get_attribute('value')
+                last_name = element.find_elements_by_css_selector('td')[1].text
+                first_name = element.find_elements_by_css_selector('td')[2].text
+                self.contact_cache.append(Contact(first_name=first_name, last_name=last_name, id=id))
+        return list(self.contact_cache)
 
     def submit_button_click(self):
         self.app.wd.find_element_by_xpath("(//input[@type='submit'])[1]").click()
@@ -114,31 +118,37 @@ class ContactHelper:
         self.fill_in(contact)
         self.submit_button_click()
         self.return_to_homepage()
+        self.contact_cache = None
 
     def add_with_bottom_submit(self, contact):
         self.open_add_page()
         self.fill_in(contact)
         self.submit_down_button_click()
         self.return_to_homepage()
+        self.contact_cache = None
 
     def edit(self, contact):
         self.open_edit_page()
         self.fill_in(contact)
         self.update_button_click()
         self.return_to_homepage()
+        self.contact_cache = None
 
     def edit_with_bottom_submit(self, contact):
         self.open_edit_page()
         self.fill_in(contact)
         self.update_bottom_button_click()
         self.return_to_homepage()
+        self.contact_cache = None
 
     def delete_first(self):
         self.select_first()
         self.delete_button_click()
         self.go_to_main_page()
+        self.contact_cache = None
 
     def delete_from_edit_page(self):
         self.open_edit_page()
         self.delete_from_editpage_button_click()
         self.go_to_main_page()
+        self.contact_cache = None
