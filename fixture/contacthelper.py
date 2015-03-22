@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from selenium.webdriver.support.ui import Select
+from model.contact import Contact
 
 
 class ContactHelper:
@@ -22,7 +23,9 @@ class ContactHelper:
         self.app.wd.find_element_by_name("selected[]").click()
 
     def open_add_page(self):
-        self.app.wd.get("http://localhost/addressbook/edit.php")
+        wd = self.app.wd
+        if not(wd.current_url.endswith("/edit.php")):
+            wd.find_element_by_link_text("add new").click()
 
     def delete_button_click(self):
         self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
@@ -71,6 +74,16 @@ class ContactHelper:
         self.change_field_value("phone2", contact.phone_secondary)
         self.change_field_value("notes", contact.notes)
 
+    def get_contact_list(self):
+        wd = self.app.wd
+        contact_list = []
+        for element in wd.find_elements_by_css_selector('tr[name=entry]'):
+            id = element.find_element_by_css_selector('input').get_attribute('value')
+            last_name = element.find_elements_by_css_selector('td')[1].text
+            first_name = element.find_elements_by_css_selector('td')[2].text
+            contact_list.append(Contact(first_name=first_name, last_name=last_name, id=id))
+        return contact_list
+
     def count(self):
         self.go_to_main_page()
         result = len(self.app.wd.find_elements_by_name('selected[]'))
@@ -92,7 +105,9 @@ class ContactHelper:
         self.app.wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
 
     def open_edit_page(self):
-        self.app.wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
+        wd = self.app.wd
+        if not(wd.current_url.endswith("/edit.php")):
+            wd.find_element_by_css_selector("img[alt=\"Edit\"]").click()
 
     def add(self, contact):
         self.open_add_page()

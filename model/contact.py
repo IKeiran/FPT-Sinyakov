@@ -1,5 +1,6 @@
 __author__ = 'Keiran'
 # -*- coding: utf-8 -*-
+from sys import maxsize
 
 
 def randomize_str(attr):
@@ -13,7 +14,7 @@ class Contact:
                  work_phone=None, fax=None, email_prime=None, email_secondary=None, email_third=None,
                  home_page=None, birthday_year=None, birthday_month=None, birthday_day=None, anniversary_year=None,
                  anniversary_day=None, anniversary_month=None, adress_secondary=None,
-                 phone_secondary=None, notes=None):
+                 phone_secondary=None, notes=None, id=None):
         self.first_name = first_name
         self.mid_name = mid_name
         self.last_name = last_name
@@ -38,6 +39,7 @@ class Contact:
         self.adress_secondary = adress_secondary
         self.phone_secondary = phone_secondary
         self.notes = notes
+        self.id = id
 
     @classmethod
     def random(cls):
@@ -66,3 +68,16 @@ class Contact:
                    adress_secondary=randomize_str('adress_secondary'),
                    phone_secondary=randomize_str('phone_secondary'),
                    notes=randomize_str('notes'))
+
+    def id_or_max(self):
+        if self.id:
+            return int(self.id)
+        else:
+            return maxsize
+
+    def __repr__(self):
+        return 'First name: %s; Last name: %s; id = %s' % (self.first_name, self.last_name, self.id)
+
+    def __eq__(self, other):
+        return (self.id is None or other.id is None or self.id == other.id) \
+        and (self.first_name == other.first_name) and (self.last_name == other.last_name)
