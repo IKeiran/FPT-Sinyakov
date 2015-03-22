@@ -59,8 +59,8 @@ class ContactHelper:
         self.change_field_value("middlename", contact.mid_name)
         self.change_field_value("lastname", contact.last_name)
         self.change_field_value("nickname", contact.nick_name)
-        self.change_field_value("title", contact.title)
         self.change_field_value("company", contact.company)
+        self.change_field_value("title", contact.title)
         self.change_field_value("address", contact.adress)
         self.change_field_value("home", contact.home_phone)
         self.change_field_value("mobile", contact.mobile_phone)
@@ -96,51 +96,37 @@ class ContactHelper:
                 self.contact_cache.append(Contact(first_name=first_name, last_name=last_name, id=id))
         return list(self.contact_cache)
 
-    def submit_button_click(self):
-        self.app.wd.find_element_by_xpath("(//input[@type='submit'])[1]").click()
-
-    def submit_down_button_click(self):
-        self.app.wd.find_element_by_xpath("(//input[@type='submit'])[2]").click()
+    def submit_button_click(self, bottom_button):
+        if bottom_button:
+            self.app.wd.find_element_by_xpath("(//input[@type='submit'])[2]").click()
+        else:
+            self.app.wd.find_element_by_xpath("(//input[@type='submit'])[1]").click()
 
     def delete_from_editpage_button_click(self):
         self.app.wd.find_element_by_xpath("//form[@action='delete.php']/input[@type='submit']").click()
 
-    def update_button_click(self):
-        self.app.wd.find_element_by_xpath("(//input[@name='update'])[1]").click()
-
-    def update_bottom_button_click(self):
-        self.app.wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+    def update_button_click(self, bottom_button):
+        if bottom_button:
+            self.app.wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+        else:
+            self.app.wd.find_element_by_xpath("(//input[@name='update'])[1]").click()
 
     def open_edit_page(self, index):
         wd = self.app.wd
         if not(wd.current_url.endswith("/edit.php")):
             wd.find_elements_by_css_selector("img[alt=\"Edit\"]")[index].click()
 
-    def add(self, contact):
+    def add(self, contact, bottom_button=True):
         self.open_add_page()
         self.fill_in(contact)
-        self.submit_button_click()
+        self.submit_button_click(bottom_button)
         self.return_to_homepage()
         self.contact_cache = None
 
-    def add_with_bottom_submit(self, contact):
-        self.open_add_page()
-        self.fill_in(contact)
-        self.submit_down_button_click()
-        self.return_to_homepage()
-        self.contact_cache = None
-
-    def edit(self, index, contact):
+    def edit(self, index, contact, bottom_button=True):
         self.open_edit_page(index)
         self.fill_in(contact)
-        self.update_button_click()
-        self.return_to_homepage()
-        self.contact_cache = None
-
-    def edit_with_bottom_submit(self, contact):
-        self.open_edit_page()
-        self.fill_in(contact)
-        self.update_bottom_button_click()
+        self.update_button_click(bottom_button)
         self.return_to_homepage()
         self.contact_cache = None
 
