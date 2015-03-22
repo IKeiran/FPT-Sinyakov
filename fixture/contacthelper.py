@@ -33,19 +33,24 @@ class ContactHelper:
     def select_by_index(self, index):
         self.app.wd.find_elements_by_name("selected[]")[index].click()
 
+    def delete_button_click(self):
+        self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        self.app.wd.switch_to_alert().accept()
+
     def open_add_page(self):
         wd = self.app.wd
         if not(wd.current_url.endswith("/edit.php")):
             wd.find_element_by_link_text("add new").click()
 
-    def delete_button_click(self):
-        self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
-        self.app.wd.switch_to_alert().accept()
-
     def go_to_main_page(self):
         wd = self.app.wd
         if not(len(wd.find_elements_by_name("add")) > 0 and len(wd.find_elements_by_name("to_group")) > 0):
             wd.find_element_by_link_text("home").click()
+
+    def open_edit_page(self, index):
+        wd = self.app.wd
+        if not(wd.current_url.endswith("/edit.php")):
+            wd.find_elements_by_css_selector("img[alt=\"Edit\"]")[index].click()
 
     def return_to_homepage(self):
         self.app.wd.find_element_by_link_text("home page").click()
@@ -110,11 +115,6 @@ class ContactHelper:
             self.app.wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         else:
             self.app.wd.find_element_by_xpath("(//input[@name='update'])[1]").click()
-
-    def open_edit_page(self, index):
-        wd = self.app.wd
-        if not(wd.current_url.endswith("/edit.php")):
-            wd.find_elements_by_css_selector("img[alt=\"Edit\"]")[index].click()
 
     def add(self, contact, bottom_button=True):
         self.open_add_page()
