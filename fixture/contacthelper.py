@@ -50,7 +50,7 @@ class ContactHelper:
     def open_edit_page(self, index):
         wd = self.app.wd
         if not(wd.current_url.endswith("/edit.php")):
-            wd.find_elements_by_css_selector("img[alt=\"Edit\"]")[index].click()
+            wd.find_elements_by_css_selector('img[alt="Edit"]')[index].click()
 
     def return_to_homepage(self):
         self.app.wd.find_element_by_link_text("home page").click()
