@@ -14,7 +14,7 @@ class Contact:
                  work_phone=None, fax=None, email_prime=None, email_secondary=None, email_third=None,
                  home_page=None, birthday_year=None, birthday_month=None, birthday_day=None, anniversary_year=None,
                  anniversary_day=None, anniversary_month=None, adress_secondary=None,
-                 phone_secondary=None, notes=None, id=None):
+                 phone_secondary=None, notes=None, id=None, all_phones=None, all_mails=None):
         self.first_name = first_name
         self.mid_name = mid_name
         self.last_name = last_name
@@ -40,6 +40,25 @@ class Contact:
         self.phone_secondary = phone_secondary
         self.notes = notes
         self.id = id
+        self.all_phones = all_phones
+        self.all_mails = all_mails
+
+    def __clear__(self, s):
+        import re
+        return re.sub("[() -]", "", s)
+
+    def __join_all__(self, params):
+        return '\n'.join(filter(lambda x: x != "",
+                    map(lambda x: self.__clear__(x),
+                        filter(lambda x: x is not None,params))))
+
+    def join_phones(self):
+        self.all_phones = self.__join_all__([self.home_phone, self.mobile_phone, self.work_phone, self.phone_secondary])
+        return self.all_phones
+
+    def join_mails(self):
+        self.all_mails = self.__join_all__([self.email_prime, self.email_secondary, self.email_third])
+        return self.all_mails
 
     @classmethod
     def random(cls):
@@ -80,4 +99,4 @@ class Contact:
 
     def __eq__(self, other):
         return (self.id is None or other.id is None or self.id == other.id) \
-        and (self.first_name == other.first_name) and (self.last_name == other.last_name)
+            and (self.first_name == other.first_name) and (self.last_name == other.last_name)

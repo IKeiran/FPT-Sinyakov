@@ -99,10 +99,10 @@ class ContactHelper:
                 id = cells[0].find_element_by_css_selector('input').get_attribute('value')
                 last_name = cells[1].text
                 first_name = cells[2].text
-                all_phones = cells[5].text.splitlines()
+                all_mails = cells[4].text
+                all_phones = cells[5].text
                 self.contact_cache.append(Contact(first_name=first_name, last_name=last_name, id=id,
-                                                  home_phone = all_phones[0],mobile_phone=all_phones[1],
-                                                  work_phone=all_phones[2], phone_secondary=all_phones[3]))
+                                                  all_phones=all_phones, all_mails=all_mails))
         return list(self.contact_cache)
 
     def submit_button_click(self, bottom_button):
@@ -155,12 +155,17 @@ class ContactHelper:
         self.open_edit_page(index)
         first_name = wd.find_element_by_name("firstname").get_attribute("value")
         last_name = wd.find_element_by_name("lastname").get_attribute("value")
+        email_prime = wd.find_element_by_name("email").get_attribute("value")
+        email_secondary = wd.find_element_by_name("email2").get_attribute("value")
+        email_third = wd.find_element_by_name("email3").get_attribute("value")
         id = wd.find_element_by_name("id").get_attribute("value")
         home_phone = wd.find_element_by_name("home").get_attribute("value")
         work_phone = wd.find_element_by_name("work").get_attribute("value")
         mobile_phone = wd.find_element_by_name("mobile").get_attribute("value")
         secondary_phone = wd.find_element_by_name("phone2").get_attribute("value")
-        return Contact(first_name=first_name, last_name= last_name, id=id, home_phone=home_phone,
+        return Contact(first_name=first_name, last_name=last_name, id=id,
+                       email_prime=email_prime, email_secondary=email_secondary, email_third=email_third,
+                       home_phone=home_phone,
                        work_phone=work_phone, mobile_phone=mobile_phone, phone_secondary=secondary_phone)
 
     def open_view_page_by_index(self, index):
@@ -175,7 +180,6 @@ class ContactHelper:
         wd = self.app.wd
         self.open_view_page_by_index(index)
         text = wd.find_element_by_id("content").text
-
         home_phone = re.search('H: (.*)', text).group(1)
         work_phone = re.search('W: (.*)', text).group(1)
         mobile_phone = re.search('M: (.*)', text).group(1)
