@@ -2,6 +2,12 @@ __author__ = 'Keiran'
 from sys import maxsize
 
 
+def randomize_str(attr, max_len=5):
+    import random, string
+    symbols = string.ascii_letters + string.digits + " " * 10
+    return attr + "".join(random.choice(symbols) for i in range(max_len)).rstrip()
+
+
 class Group:
     def __init__(self, name=None, header=None, footer=None, id=None):
         self.name = name
@@ -11,10 +17,9 @@ class Group:
 
     @classmethod
     def random(cls):
-        import random
-        return cls(name="Group_name" + str(random.randint(0, 1000000)),
-                   header="Group_header" + str(random.randint(0, 1000000)),
-                   footer="Group_footer" + str(random.randint(0, 1000000)))
+        return cls(name=randomize_str("Group_name"),
+                   header=randomize_str("Group_header"),
+                   footer=randomize_str("Group_footer"))
 
     def __repr__(self):
         return "%s:%s;%s;%s" % (self.id, self.name, self.header, self.footer)

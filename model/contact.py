@@ -3,9 +3,10 @@ __author__ = 'Keiran'
 from sys import maxsize
 
 
-def randomize_str(attr):
-    import random
-    return attr + str(random.randint(0, 1000000))
+def randomize_str(attr, max_len=5):
+    import random, string
+    symbols = string.ascii_letters + string.digits + " " * 10
+    return attr + "".join(random.choice(symbols) for i in range(max_len)).strip()
 
 
 class Contact:

@@ -31,7 +31,8 @@ class ContactHelper:
         self.select_by_index(0)
 
     def select_by_index(self, index):
-        self.app.wd.find_elements_by_name("selected[]")[index].click()
+            if index is not None:
+                self.app.wd.find_elements_by_name("selected[]")[index].click()
 
     def delete_button_click(self):
         self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
@@ -57,7 +58,8 @@ class ContactHelper:
 
     def change_combobox_value(self, selector, value):
         wd = self.app.wd
-        Select(wd.find_element_by_name(selector)).select_by_index(value)
+        if value is not None:
+            Select(wd.find_element_by_name(selector)).select_by_index(value)
 
     def fill_in(self, contact):
         self.change_field_value("firstname", contact.first_name)

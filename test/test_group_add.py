@@ -2,10 +2,8 @@
 from model.group import Group
 import pytest
 
-test_data = [
-    Group.random(),
-    Group(name='', header='', footer='')
-]
+test_data = [Group(name='', header='', footer='')] + \
+            [Group.random() for i in range(5)]
 
 
 @pytest.mark.parametrize('test_group', test_data, ids=[repr(x) for x in test_data])
