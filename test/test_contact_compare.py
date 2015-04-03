@@ -1,6 +1,7 @@
 __author__ = 'Keiran'
 from random import randrange
 
+
 def test_contact_compare(app):
     index = randrange(app.contact.count())
     contact_from_home_page = app.contact.get_contact_list()[index]

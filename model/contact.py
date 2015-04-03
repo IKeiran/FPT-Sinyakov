@@ -3,11 +3,12 @@ __author__ = 'Keiran'
 from sys import maxsize
 
 
-def randomize_str(attr, max_len=5):
+def randomize_str(attr, max_len=5, include_spaces = True):
     import random, string
-    symbols = string.ascii_letters + string.digits + " " * 10
-    return attr + "".join(random.choice(symbols) for i in range(max_len)).strip()
-
+    symbols = string.ascii_letters + string.digits
+    if include_spaces:
+        symbols += " " * 10
+    return attr + "".join(random.choice(symbols) for i in range(max_len)).rstrip().lstrip()
 
 class Contact:
     def __init__(self, first_name=None, mid_name=None, last_name=None, nick_name=None,
@@ -51,7 +52,7 @@ class Contact:
     def __join_all__(self, params):
         return '\n'.join(filter(lambda x: x != "",
                     map(lambda x: self.__clear__(x),
-                        filter(lambda x: x is not None,params))))
+                        filter(lambda x: x is not None, params))))
 
     def join_phones(self):
         self.all_phones = self.__join_all__([self.home_phone, self.mobile_phone, self.work_phone, self.phone_secondary])
@@ -75,9 +76,9 @@ class Contact:
                    mobile_phone=randomize_str('mobile_phone'),
                    work_phone=randomize_str('work_phone'),
                    fax=randomize_str('fax'),
-                   email_prime=randomize_str('email_prime'),
-                   email_secondary=randomize_str('email_secondary'),
-                   email_third=randomize_str('email_third'),
+                   email_prime=randomize_str('email_prime', include_spaces=False),
+                   email_secondary=randomize_str('email_secondary', include_spaces=False),
+                   email_third=randomize_str('email_third', include_spaces=False),
                    home_page=randomize_str('home_page'),
                    birthday_year=str(random.randint(1950, 2015)),
                    birthday_month=str(random.randint(0, 12)),

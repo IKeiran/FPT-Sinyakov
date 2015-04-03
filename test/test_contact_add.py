@@ -4,9 +4,8 @@ from model.contact import Contact
 import pytest
 
 
-# test_data = [Contact(first_name='', mid_name='', last_name='')]\
-           # + \
-test_data = [Contact.random() for i in range(5)]
+test_data = [Contact(first_name='', mid_name='', last_name='', adress='')]\
+            +[Contact.random() for i in range(5)]
 
 b_button = [True, False]
 
@@ -21,7 +20,6 @@ def test_contact_add(app, contact):
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
 
-"""
 @pytest.mark.parametrize('bottom_button', b_button, ids=[repr(x) for x in b_button])
 def test_contact_add_with_upper_submit_button(app, bottom_button):
     contact = Contact.random()
@@ -32,4 +30,3 @@ def test_contact_add_with_upper_submit_button(app, bottom_button):
     new_contacts = app.contact.get_contact_list()
     old_contacts.append(contact)
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
-"""
