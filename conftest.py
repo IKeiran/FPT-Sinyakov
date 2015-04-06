@@ -7,12 +7,12 @@ fixture = None
 def app(request):
     global fixture
     if fixture is None:
-        fixture = Application()
-        fixture.session.login_as("admin", "secret")
+        browser = request.config.getoption('--browser')
+        fixture = Application(browser)
     else:
         if not fixture.is_valid():
             fixture = Application()
-            fixture.session.login_as("admin", "secret")
+    fixture.session.login_as("admin", "secret")
     return fixture
 
 
@@ -22,3 +22,9 @@ def stop(request):
         fixture.session.logout()
         fixture.destroy()
     request.addfinalizer(fin)
+
+
+def pytest_addoption(parser):
+    parser.addoption('--browser', action='store', default = 'firefox')
+
+
