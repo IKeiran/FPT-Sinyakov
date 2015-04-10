@@ -1,11 +1,11 @@
 from model.group import Group
 import os.path
-import json
+import jsonpickle
 import getopt
 import sys
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "n:f:", ["number of groups", "output ашду"])
+    opts, args = getopt.getopt(sys.argv[1:], "n:f:", ["number of groups", "output file"])
 except getopt.GetoptError as err:
 #    getopt.usage()
     sys.exit(2)
@@ -25,5 +25,6 @@ test_data = [Group(name='', header='', footer='')] + \
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
 with open(file, 'w') as out_file:
-    out_file.write(json.dumps(test_data, default=lambda x: x.__dict__, indent=2))
+    jsonpickle.set_encoder_options("json", indent=2)
+    out_file.write(jsonpickle.encode(test_data))
 
