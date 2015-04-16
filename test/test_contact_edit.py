@@ -5,7 +5,6 @@ from random import randrange
 import pytest
 
 
-
 bot_button = [True, False]
 
 @pytest.mark.parametrize('bottom_button', bot_button, ids=[repr(x) for x in bot_button])
@@ -16,6 +15,7 @@ def test_contact_edit_with_upper_submit(app, bottom_button):
     app.go_to_main_page()
     old_contacts = app.contact.get_contact_list()
     index = randrange(len(old_contacts))
+
     id = old_contacts[index].id
     app.contact.edit(index, contact, bottom_button)
     new_contacts = app.contact.get_contact_list()

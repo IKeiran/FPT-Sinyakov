@@ -24,5 +24,27 @@ class DBFixture:
             cursor.close()
         return group_list
 
+    def get_contact_list(self):
+        cursor = self.connection.cursor()
+        contact_list = []
+        try:
+            print ('select')
+            cursor.execute('select title from addressbook')
+            print ('complete')
+          #  return contact_list
+
+            # """
+            # , firstname, middlename, lastname, nickname, company,
+            # title, address, home, mobile, work, fax,
+            # email, email2, email3, homepage,
+            # bday, bmonth, byear, aday, amonth, ayear, address2, phone2, notes
+            # """
+            # for row in cursor:
+            #     (id, name, header, footer) = row
+            #     group_list.append(Group(id=str(id), name=name, header=header, footer=footer))
+        finally:
+            cursor.close()
+        return contact_list
+
     def destroy(self):
         self.connection.close()
