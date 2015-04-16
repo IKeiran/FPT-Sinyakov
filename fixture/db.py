@@ -1,6 +1,7 @@
 __author__ = 'Keiran'
 import mysql.connector
 from model.group import Group
+from model.contact import Contact
 
 class DBFixture:
 
@@ -28,20 +29,10 @@ class DBFixture:
         cursor = self.connection.cursor()
         contact_list = []
         try:
-            print ('select')
-            cursor.execute('select title from addressbook')
-            print ('complete')
-          #  return contact_list
-
-            # """
-            # , firstname, middlename, lastname, nickname, company,
-            # title, address, home, mobile, work, fax,
-            # email, email2, email3, homepage,
-            # bday, bmonth, byear, aday, amonth, ayear, address2, phone2, notes
-            # """
-            # for row in cursor:
-            #     (id, name, header, footer) = row
-            #     group_list.append(Group(id=str(id), name=name, header=header, footer=footer))
+            cursor.execute("select id, firstname, lastname, address from addressbook WHERE deprecated = '0000-00-00 00:00:00'")
+            for row in cursor:
+                (id, first_name, last_name, adress) = row
+                contact_list.append(Contact(id=str(id), first_name=first_name, last_name=last_name, adress=adress))
         finally:
             cursor.close()
         return contact_list

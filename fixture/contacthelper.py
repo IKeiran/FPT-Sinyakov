@@ -34,6 +34,10 @@ class ContactHelper:
             if index is not None:
                 self.app.wd.find_elements_by_name("selected[]")[index].click()
 
+    def select_by_id(self, id):
+            if id is not None:
+                self.app.wd.find_element_by_id("%s" % id).click()
+
     def delete_button_click(self):
         self.app.wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         self.app.wd.switch_to_alert().accept()
@@ -52,6 +56,11 @@ class ContactHelper:
         wd = self.app.wd
         if not(wd.current_url.endswith("/edit.php")):
             wd.find_elements_by_css_selector('img[alt="Edit"]')[index].click()
+
+    def open_edit_page_by_id(self, id):
+        wd = self.app.wd
+        if not(wd.current_url.endswith("/edit.php")):
+            wd.find_element_by_css_selector('a[href="edit.php?id=%s"]' % id).click()
 
     def return_to_homepage(self):
         self.app.wd.find_element_by_link_text("home page").click()
@@ -138,6 +147,13 @@ class ContactHelper:
         self.return_to_homepage()
         self.contact_cache = None
 
+    def edit_by_id(self, id, contact, bottom_button=True):
+        self.open_edit_page_by_id(id=id)
+        self.fill_in(contact)
+        self.update_button_click(bottom_button)
+        self.return_to_homepage()
+        self.contact_cache = None
+
     def delete_first(self):
         self.delete_by_index(0)
 
@@ -147,8 +163,14 @@ class ContactHelper:
         self.go_to_main_page()
         self.contact_cache = None
 
-    def delete_from_edit_page(self, index):
-        self.open_edit_page(index)
+    def delete_by_id(self, id):
+        self.select_by_id(id=id)
+        self.delete_button_click()
+        self.go_to_main_page()
+        self.contact_cache = None
+
+    def delete_from_edit_page(self, id):
+        self.open_edit_page_by_id(id)
         self.delete_from_editpage_button_click()
         self.go_to_main_page()
         self.contact_cache = None
