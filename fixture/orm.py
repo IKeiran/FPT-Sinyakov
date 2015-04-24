@@ -23,8 +23,15 @@ class ORMFixtue:
         first_name = Optional(str, column='firstname')
         last_name = Optional(str, column='lastname')
         address = Optional(str, column='address')
+
+        home_phone = Optional(str, column='home')
+        mobile_phone = Optional(str, column='mobile')
+        work_phone = Optional(str, column='work')
+        email_prime = Optional(str, column='email')
+        email_secondary = Optional(str, column='email2')
+        email_third = Optional(str, column='email3')
         deprecated = Optional(datetime, column='deprecated')
-        groups = Set(lambda: ORMFixtue.ORMGroup, table='address_in_groups', column='group_id', reverse='contacts', lazy=True)
+        groups = Set(lambda: ORMFixtue.ORMGroup, table='address_in_groups', column='group_id', reverse='contacts', lazy = True)
 
     def __init__(self, host, name, user, password):
         self.db.bind('mysql', host=host, database=name, user=user, password=password, conv=decoders)
@@ -41,7 +48,11 @@ class ORMFixtue:
 
     def convert_contacts_to_model(self, contacts):
         def convert(contact):
-            return Contact(id=str(contact.id), first_name=contact.first_name, last_name=contact.last_name, adress=contact.address)
+            result = Contact(id=str(contact.id),
+                           first_name=contact.first_name, last_name=contact.last_name, adress=contact.address,
+                           home_phone=contact.home_phone, mobile_phone=contact.mobile_phone, work_phone=contact.work_phone,
+                           email_prime=contact.email_prime, email_secondary=contact.email_secondary, email_third=contact.email_third)
+            return result
         return list(map(convert, contacts))
 
     @db_session
