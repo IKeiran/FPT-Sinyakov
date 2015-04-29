@@ -1,9 +1,9 @@
-__author__ = 'vs'
 from pony.orm import *
 from datetime import datetime
 from model.contact import Contact
 from model.group import Group
 from pymysql.converters import decoders
+
 
 class ORMFixtue:
 
@@ -39,7 +39,7 @@ class ORMFixtue:
 
     def convert_groups_to_model(self, groups):
         def convert(group):
-            return Group(id=str(group.id), name=group.name, header=group.header,footer=group.footer)
+            return Group(id=str(group.id), name=group.name, header=group.header, footer=group.footer)
         return list(map(convert, groups))
 
     @db_session
@@ -63,6 +63,7 @@ class ORMFixtue:
     def get_orm_group(self, group):
         return list(select(g for g in ORMFixtue.ORMGroup if g.id == group.id))[0]
 
+    @db_session
     def get_contacts_in_group(self, group):
         orm_group = self.get_orm_group(group)
         return self.convert_contacts_to_model(orm_group.contacts)

@@ -59,7 +59,10 @@ class Contact:
         return self.all_phones
 
     def join_mails(self):
-        self.all_mails = self.__join_all__([self.email_prime, self.email_secondary, self.email_third])
+        self.all_mails = '\n'.join(filter(lambda x: x != "",
+                    map(lambda x: x,
+                        filter(lambda x: x is not None, [self.email_prime, self.email_secondary, self.email_third]))))
+            #all_mails = self.__join_all__([self.email_prime, self.email_secondary, self.email_third])
         return self.all_mails
 
     @classmethod
