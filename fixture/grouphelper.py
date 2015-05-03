@@ -119,3 +119,11 @@ class GroupHelper:
         self.update_button_click()
         self.return_to_group_page()
         self.group_cache = None
+
+    def navigate_to_group_page(self, group_name):
+        wd = self.app.wd
+        wd.get(self.app.base_url+'?group=%s' % group_name)
+
+    def remove_contact_button_click(self):
+        wd = self.app.wd
+        wd.find_element_by_name('remove').click()

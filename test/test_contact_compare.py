@@ -2,7 +2,7 @@ __author__ = 'Keiran'
 from model.contact import Contact
 
 
-def test_contact_compare(app,orm):
+def test_contact_compare(app, orm):
     contacts_from_db = orm.get_contact_list()
     sorted_contacts_from_db = list(sorted(contacts_from_db, key=Contact.id_or_max))
     contacts_from_home_page = app.contact.get_contact_list()

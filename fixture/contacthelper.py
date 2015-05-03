@@ -65,7 +65,7 @@ class ContactHelper:
     def return_to_homepage(self):
         self.app.wd.find_element_by_link_text("home page").click()
 
-    def change_combobox_value(self, selector, value):
+    def change_combobox_value_by_index(self, selector, value):
         wd = self.app.wd
         if value is not None:
             Select(wd.find_element_by_name(selector)).select_by_index(value)
@@ -88,14 +88,14 @@ class ContactHelper:
         self.change_field_value("homepage", contact.home_page)
         self.change_field_value("firstname", contact.first_name)
         # u'изменение дня рождения'
-        self.change_combobox_value("bday", contact.birthday_day)
+        self.change_combobox_value_by_index("bday", contact.birthday_day)
         # u'изменение месяца рождения'
-        self.change_combobox_value("bmonth", contact.birthday_month)
+        self.change_combobox_value_by_index("bmonth", contact.birthday_month)
         self.change_field_value("byear", contact.birthday_year)
         # u'изменение дня юбилея'
-        self.change_combobox_value("aday", contact.anniversary_day)
+        self.change_combobox_value_by_index("aday", contact.anniversary_day)
         # u'изменение месяца юбилея'
-        self.change_combobox_value("amonth", contact.anniversary_month)
+        self.change_combobox_value_by_index("amonth", contact.anniversary_month)
         self.change_field_value("ayear", contact.anniversary_year)
         self.change_field_value("address2", contact.adress_secondary)
         self.change_field_value("phone2", contact.phone_secondary)
@@ -213,3 +213,73 @@ class ContactHelper:
         secondary_phone = re.search('P: (.*)', text).group(1)
         return Contact(home_phone=home_phone,work_phone=work_phone,
                        mobile_phone=mobile_phone, phone_secondary=secondary_phone)
+
+    def create_contact_group_pair(self, orm, group_list):
+        from model.group import Group
+        import random
+        contact_list = orm.get_contact_list()
+        test_data = dict()
+        if len(contact_list) > 0:
+            self.app.group.create(Group.random())
+            self.go_to_main_page()
+            group_list = orm.get_group_list()
+            test_data['group'] = sorted(group_list, key=Group.id_or_max)[-1]
+            test_data['contact'] = random.choice(contact_list)
+        elif len(group_list) > 0:
+            self.app.contact.add(Contact.random())
+            contact_list = orm.get_contact_list()
+            test_data['group'] = random.choice(group_list)
+            test_data['contact'] = sorted(contact_list, key=Contact.id_or_max)[-1]
+        else:
+            self.app.group.create(Group.random())
+            self.go_to_main_page()
+            self.app.contact.add(Contact.random())
+            test_data['group'] = orm.get_group_list()[0]
+            test_data['contact'] = orm.get_contact_list()[0]
+        return test_data
+
+    def get_contact_group_boundary(self, orm, in_group=False):
+        import random
+        group_list = orm.get_group_list()
+        test_data = dict()
+        contacts = list()
+        group_number = 0
+        if in_group:
+            check = orm.get_contacts_in_group
+        else:
+            check = orm.get_contacts_not_in_group
+        while len(contacts) == 0 and group_number <= len(group_list):
+            contacts = check(group_list[group_number])
+            if len(contacts) > 0:
+                test_data['contact'] = random.choice(contacts)
+                test_data['group'] = group_list[group_number]
+                return test_data
+            else:
+                group_number += 1
+        test_data = self.create_contact_group_pair(orm=orm, group_list=group_list)
+        if in_group:
+            self.add_contact_to_group(contact=test_data['contact'], group=test_data['group'])
+        return test_data
+
+    def change_combobox_value_by_text(self, selector, value):
+        wd = self.app.wd
+        combobox = wd.find_element_by_name(selector)
+        Select(combobox).select_by_visible_text(value)
+
+    def add_contact_in_group_button_click(self):
+        wd = self.app.wd
+        wd.find_element_by_name('add').click()
+
+    def add_contact_to_group(self, contact, group):
+        self.select_by_id(contact.id)
+        selector = 'to_group'
+        self.change_combobox_value_by_text(selector=selector, value=group.name)
+        self.add_contact_in_group_button_click()
+        self.go_to_main_page()
+
+    def remove_contact_from_group(self, contact, group):
+        self.select_by_id(contact.id)
+        self.app.group.navigate_to_group_page(group_name=group.name)
+        self.select_by_id(contact.id)
+        self.app.group.remove_contact_button_click()
+        self.go_to_main_page()

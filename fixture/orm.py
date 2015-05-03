@@ -17,6 +17,11 @@ class ORMFixtue:
         footer = Optional(str, column='group_footer')
         contacts = Set(lambda: ORMFixtue.ORMContact, table='address_in_groups', column='id', reverse='groups', lazy=True)
 
+    # class ORMBoundary(db.Entity):
+    #     _table_ = 'address_in_groups'
+    #     contacts_id = Optional(int, column='id')
+    #     groups_id = Optional(int, column='group_id')
+
     class ORMContact(db.Entity):
         _table_ = 'addressbook'
         id = PrimaryKey(int, column='id')
@@ -73,3 +78,7 @@ class ORMFixtue:
         orm_group = self.get_orm_group(group)
         return self.convert_contacts_to_model(
             select(c for c in ORMFixtue.ORMContact if c.deprecated is None and orm_group not in c.groups))
+
+    # @db_session
+    # def get_contact_group_boundry(self):
+    #     return list(select(d for d in ORMFixtue.ORMBoundary))
